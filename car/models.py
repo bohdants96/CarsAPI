@@ -21,7 +21,7 @@ class Car(models.Model):
     fuel_type = models.CharField(max_length=50)
     transmission = models.CharField(max_length=50, choices=TRANSMISSION_OPTIONS, default="Manual")
     engine = models.CharField(max_length=50)
-    on_sale = models.BooleanField()
+    is_on_sale = models.BooleanField()
 
     def __str__(self):
         return self.brand.name + " " + self.model.name
