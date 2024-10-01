@@ -10,28 +10,17 @@ from .serializer import ModelSerializer
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_models(request):
-    name = request.GET.getlist('name')
-    issue_year = request.GET.getlist('issue_year')
-    body_style = request.GET.getlist('body_style')
-    issue_year_min = request.GET.get('issue_year_min')
-    issue_year_max = request.GET.get('issue_year_max')
+    filters = {
+        'name__in': request.GET.getlist('name'),
+        'issue_year__in': request.GET.getlist('issue_year'),
+        'body_style__in': request.GET.getlist('body_style'),
+        'issue_year__gte': request.GET.get('issue_year_min'),
+        'issue_year__lte': request.GET.get('issue_year_max'),
+    }
 
-    models = Model.objects.all().order_by('id')
+    filters = {k: v for k, v in filters.items() if v}
 
-    if name:
-        models = models.filter(name__in=name)
-    if issue_year:
-        models = models.filter(issue_year__in=issue_year)
-    if body_style:
-        models = models.filter(body_style__in=body_style)
-
-    if issue_year_min and issue_year_max:
-        models = models.filter(issue_year__range=(issue_year_min, issue_year_max))
-    elif issue_year_min:
-        models = models.filter(issue_year__gte=issue_year_min)
-    elif issue_year_max:
-        models = models.filter(issue_year__lte=issue_year_max)
-
+    models = Model.objects.filter(**filters).order_by('id')
     serializer = ModelSerializer(models, many=True)
 
     return Response(serializer.data, status=status.HTTP_200_OK)
