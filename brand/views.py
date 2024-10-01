@@ -11,16 +11,14 @@ from .serializer import BrandSerializer
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_brands(request):
-    name = request.GET.getlist('name')
-    country = request.GET.getlist('country')
+    filters = {
+        'name__in': request.GET.getlist('name'),
+        'country__in': request.GET.getlist('country'),
+    }
 
-    brands = Brand.objects.all().order_by('id')
+    filters = {k: v for k, v in filters.items() if v}
 
-    if name:
-        brands = brands.filter(name__in=name)
-    if country:
-        brands = brands.filter(country__in=country)
-
+    brands = Brand.objects.filter(**filters).order_by('id')
     serializer = BrandSerializer(brands, many=True)
 
     return Response(serializer.data, status=status.HTTP_200_OK)

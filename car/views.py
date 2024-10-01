@@ -8,6 +8,7 @@ from .serializer import CarSerializer
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_cars(request):
     filters = {
         'brand__name__in': request.GET.getlist('brand_name'),
@@ -40,6 +41,7 @@ def get_cars(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_sale_cars(request):
     filters = {
         'brand__name__in': request.GET.getlist('brand_name'),
