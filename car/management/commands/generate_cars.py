@@ -37,8 +37,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         count = options["count"][0]
-        car_data = fake.vehicle_object()
         for _ in range(count):
+            car_data = fake.vehicle_object()
             brand_example, _ = Brand.objects.get_or_create(
                 name=car_data['Make'],
                 country=fake.country()
