@@ -6,7 +6,6 @@ from rest_framework.response import Response
 from .models import Model
 from .serializer import ModelSerializer
 
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_models(request):
