@@ -23,4 +23,6 @@ def get_models(request):
     models = Model.objects.filter(**filters).order_by('id')
     serializer = ModelSerializer(models, many=True)
 
+    print('testttcdhbcsdbcj jhbckdshbchjds dhscbasd dshc bdshcba jsdbcdsbckabsddjchbdsahcbdsbchdsbcdsjbcajdscjhdsbcjdsbajbcdsbcjsdbcsajdbc;asdkbavhjbcs')
+
     return Response(serializer.data, status=status.HTTP_200_OK)
