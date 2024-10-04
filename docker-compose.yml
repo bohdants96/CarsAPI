@@ -1,0 +1,33 @@
+version: "3.9"
+
+
+services:
+  car_postgres:
+    image: postgres:15
+    container_name: car_postgres
+    volumes:
+      - ~/.pg/pg_data/car:/var/lib/postgresql/data
+    env_file:
+      - ./CarsAPI/.env
+  car_project:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    image: docker_car:latest
+    container_name: docker_car
+    depends_on:
+      - car_postgres
+    volumes:
+      - static_volume:/car/static
+      - media_volume:/car/media
+    env_file:
+      - ./CarsAPI/.env
+    command:
+      bash -c "./manage.py collectstatic --noinput && ./manage.py migrate && ./manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+
+
+volumes:
+  static_volume:
+  media_volume:
