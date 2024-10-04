@@ -1,4 +1,5 @@
 import django_filters
+
 from .models import Model
 
 
@@ -7,4 +8,4 @@ class ModelFilter(django_filters.FilterSet):
 
     class Meta:
         model = Model
-        fields = ['issue_year']
+        fields = ["issue_year"]

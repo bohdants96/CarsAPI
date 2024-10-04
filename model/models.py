@@ -1,4 +1,5 @@
 from django.db import models
+
 from model.validators import validate_year
 
 

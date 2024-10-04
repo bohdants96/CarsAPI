@@ -1,8 +1,9 @@
 from django.db import models
 
 from brand.models import Brand
-from .validators import validate_price, validate_mileage
 from model.models import Model
+
+from .validators import validate_mileage, validate_price
 
 TRANSMISSION_OPTIONS = (
     ("Manual", "Manual"),
@@ -19,7 +20,9 @@ class Car(models.Model):
     exterior_color = models.CharField(max_length=50)
     interior_color = models.CharField(max_length=50)
     fuel_type = models.CharField(max_length=50)
-    transmission = models.CharField(max_length=50, choices=TRANSMISSION_OPTIONS, default="Manual")
+    transmission = models.CharField(
+        max_length=50, choices=TRANSMISSION_OPTIONS, default="Manual"
+    )
     engine = models.CharField(max_length=50)
     is_on_sale = models.BooleanField()
 

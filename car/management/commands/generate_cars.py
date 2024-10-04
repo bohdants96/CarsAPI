@@ -1,8 +1,9 @@
+import time
+
 from django.core.management.base import BaseCommand
 from faker import Faker
 from faker.providers import DynamicProvider
 from faker_vehicle import VehicleProvider
-import time
 
 from brand.models import Brand
 from car.models import Car
@@ -33,20 +34,26 @@ class Command(BaseCommand):
     help = "Generates Car Objects"
 
     def add_arguments(self, parser):
-        parser.add_argument("count", action="store", nargs="+", default=10, type=int, help="Number of cars to generate")
+        parser.add_argument(
+            "count",
+            action="store",
+            nargs="+",
+            default=10,
+            type=int,
+            help="Number of cars to generate",
+        )
 
     def handle(self, *args, **options):
         count = options["count"][0]
         for _ in range(count):
             car_data = fake.vehicle_object()
             brand_example, _ = Brand.objects.get_or_create(
-                name=car_data['Make'],
-                country=fake.country()
+                name=car_data["Make"], country=fake.country()
             )
             model_example, _ = Model.objects.get_or_create(
-                name=car_data['Model'],
-                issue_year=car_data['Year'],
-                body_style=car_data['Category']
+                name=car_data["Model"],
+                issue_year=car_data["Year"],
+                body_style=car_data["Category"],
             )
 
             car = Car(
