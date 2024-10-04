@@ -9,14 +9,16 @@ RUN pip install --upgrade pip
 
 RUN apt upgrade
 
-RUN useradd -rms /bin/bash yt && chmod 777 /opt /run
+RUN useradd -rms /bin/bash car && chmod 777 /opt /run
 
-WORKDIR /yt
+WORKDIR /car
 
-RUN mkdir /yt/static && mkdir /yt/media && chown -R yt:yt /yt && chmod 755 /yt
+RUN mkdir /car/static && mkdir /car/media && chown -R car:car /car && chmod 755 /car
 
-COPY --chown=yt:yt . .
+COPY --chown=car:car . .
 
 RUN pip install -r requirements.txt
+
+USER car
 
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
