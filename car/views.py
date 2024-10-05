@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -98,8 +99,20 @@ def manage_sale_car(request, car_id=None):
     elif request.method == "POST":
         if request.user.is_staff:
             data = request.data.copy()
-            data["model"] = Model.objects.get(id=data.pop("model_id"))
-            data["brand"] = Brand.objects.get(id=data.pop("brand_id"))
+            try:
+                data["model"] = Model.objects.get(id=data.pop("model_id"))
+            except Model.DoesNotExist:
+                return Response(
+                    {"detail": "Model not found."},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+            try:
+                data["brand"] = Brand.objects.get(id=data.pop("brand_id"))
+            except Brand.DoesNotExist:
+                return Response(
+                    {"detail": "Brand not found."},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
             try:
                 car = Car(**data)
                 car.full_clean()
@@ -125,8 +138,24 @@ def manage_sale_car(request, car_id=None):
                 car = Car.objects.get(id=car_id)
                 try:
                     data = request.data.copy()
-                    data["model"] = Model.objects.get(id=data.pop("model_id"))
-                    data["brand"] = Brand.objects.get(id=data.pop("brand_id"))
+                    try:
+                        data["model"] = Model.objects.get(
+                            id=data.pop("model_id")
+                        )
+                    except Model.DoesNotExist:
+                        return Response(
+                            {"detail": "Model not found."},
+                            status=status.HTTP_404_NOT_FOUND,
+                        )
+                    try:
+                        data["brand"] = Brand.objects.get(
+                            id=data.pop("brand_id")
+                        )
+                    except Brand.DoesNotExist:
+                        return Response(
+                            {"detail": "Brand not found."},
+                            status=status.HTTP_404_NOT_FOUND,
+                        )
                     for key, value in data.items():
                         setattr(car, key, value)
                     car.full_clean()
